@@ -61,7 +61,6 @@ class ReportController extends Controller
         $dep = $request->department;
         $data['from'] = $request->from;
         $data['to'] = $request->to;
-
         //return $data['attendance'];
         return view('backend.reports.attendance', ['data' => $data], compact('departments', 'dep'));
     }

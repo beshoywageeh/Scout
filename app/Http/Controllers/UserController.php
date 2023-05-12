@@ -41,9 +41,10 @@ class UserController extends Controller
 
     public function store(UserCreateRequest $request, NotyFactory $flasher)
     {
+
         \Illuminate\Support\Facades\DB::beginTransaction();
-        $latest_code = User::Latest()->first()->code;
         try {
+            $latest_code = User::withTrashed()->Latest()->first()->code;
             $user = new User();
             $user->first_name = $request->first_name;
             $user->second_name = $request->second_name;
@@ -58,7 +59,7 @@ class UserController extends Controller
             $user->church_father = $request->chruch_father;
             $user->department_id = $request->department_id;
             $user->code = $latest_code + 1;
-            if ($request->has('password') && ! empty($request->has('password'))) {
+            if ($request->has('password') && !empty($request->has('password'))) {
                 $user->password = Hash::make($request->password);
             }
             if ($request->active) {

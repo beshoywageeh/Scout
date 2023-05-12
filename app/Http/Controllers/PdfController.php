@@ -51,12 +51,12 @@ class PdfController extends Controller
     {
         $data = [''];
         $data['department'] = department::with('users', 'image')->where('id', $id)->first();
-        if (is_null($data['department']->image)) {
-            $image = asset('images/login-banner.jpg');
+     /*   if (is_null($data['department']->image)) {
+
         } else {
             $image = asset('storage/attachments/departments/'.$data['department']->image->filename);
         }
-
+*/
         $pdf = PDF::loadView('pdf.data', ['data' => $data], [], [
             'format' => 'A4',
             'margin_left' => 4,
@@ -66,19 +66,19 @@ class PdfController extends Controller
             'margin_header' => 0,
             'margin_footer' => 0,
             'orientation' => 'L',
-            'watermark' => $data['department']->name,
+            'watermark' => is_null($data['department']->image) ? $data['department']->name : '',
             'show_watermark' => true,
             'show_watermark_image' => true,
             'watermark_font' => 'sans-serif',
             'display_mode' => 'fullpage',
             'watermark_text_alpha' => 0.2,
-            'watermark_image_path' => $image,
+            'watermark_image_path' => is_null($data['department']->image) ? '' : asset('storage/attachments/departments/' . $data['department']->image->filename),
             'watermark_image_alpha' => 0.2,
             'watermark_image_size' => 'D',
             'watermark_image_position' => 'P',
         ]);
 
-        return $pdf->download($data['department']->name.'.pdf');
+        return $pdf->download($data['department']->name . '.pdf');
     }
 
     public function blacklist_pdf()
@@ -119,10 +119,10 @@ class PdfController extends Controller
         $pdf = PDF::loadView('pdf.data_card', ['data' => $data], [], [
             'format' => 'custom',
             'orientation' => 'L',
-            'margin_left' => 4,
-            'margin_right' => 4,
-            'margin_top' => 4,
-            'margin_bottom' => 4,
+            'margin_left' => 1,
+            'margin_right' => 1,
+            'margin_top' => 1,
+            'margin_bottom' => 1,
             'margin_header' => 0,
             'margin_footer' => 0,
             'watermark_image_path' => asset('images/login-banner.jpg'),
@@ -136,7 +136,7 @@ class PdfController extends Controller
             'watermark_image_position' => 'P',
         ]);
 
-        return $pdf->download($doc_name.'.pdf');
+        return $pdf->download($doc_name . '.pdf');
     }
 
     public function attendance_pdf($id, $date_from = null, $date_to = null)
@@ -189,6 +189,6 @@ class PdfController extends Controller
             'watermark_image_position' => 'P',
         ]);
 
-        return $pdf->stream($data['department']->name.' - حضور.pdf');
+        return $pdf->download($data['department']->name . ' - حضور.pdf');
     }
 }

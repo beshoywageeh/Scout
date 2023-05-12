@@ -8,25 +8,25 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $data['department']->name }}</title>
     <style>
-       table td,
-    {
+        table td,
+            {
+            border-collapse: collapse;
             text-align: center;
-            border: 1px solid black;
-        }
-
-        thead,
-        th {
-            background-color: black;
-            color: white;
         }
 
         #header,
-        .data {
+            {
             display: flex;
             justify-content: center;
             align-content: center;
             align-items: center;
             margin: auto;
+        }
+
+        #header {
+            border-collapse: collapse;
+            text-align: center;
+            margin-bottom: 0.5rem;
         }
 
         .logo {
@@ -36,6 +36,27 @@
 
         .data {
             width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+
+        .data tr th,
+        .data tr td {
+            padding: 5px;
+            border: 1px solid #6d6d6d;
+        }
+        .data thead tr{
+            background-color: black;
+
+        }
+        .data thead tr th{
+
+            color: white;
+        }
+        #header tr th,
+        #header tr td {
+            padding: 5px;
+            border: 1px solid #6d6d6d;
         }
     </style>
 </head>
@@ -46,7 +67,7 @@
             <td rowspan="2" style="width: 100%">
 
                 @if (is_null($data['department']->image))
-                    <img class='logo' src="{{ asset('images/login-banner.jpg') }}">
+                    <h3>{{$data['department']->name}}</h3>
                 @else
                     <img class='logo'
                         src="{{ asset('storage/attachments/departments/' . $data['department']->image->filename) }}">

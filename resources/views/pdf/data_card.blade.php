@@ -8,16 +8,16 @@
     <title>{{$data['user']->first_name . ' ' . $data['user']->second_name}}</title>
     <style>
         table {
-            display: flex;
             width: 100%;
-            overflow: auto;
+border-collapse: collapse;
+text-align: center;
         }
 
-       
-       table td,
+
+       table tr td,
     {
-            text-align: center;
-            border: 1px solid black;
+        padding:0.3rem;
+            border: 1px solid #6d6d6d;
         }
     </style>
 </head>

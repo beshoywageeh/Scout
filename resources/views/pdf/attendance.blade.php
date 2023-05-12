@@ -9,26 +9,24 @@
     <title>{{ $data['department']->name }}</title>
     <style>
         table td,
-        th {
+            {
+            border-collapse: collapse;
             text-align: center;
-            border: 1px solid black;
-        }
-
-        thead,
-        th {
-            background-color: #ddd;
-            color: black;
-            padding: 0.2rem;
-
         }
 
         #header,
-        .data {
+            {
             display: flex;
             justify-content: center;
             align-content: center;
             align-items: center;
             margin: auto;
+        }
+
+        #header {
+            border-collapse: collapse;
+            text-align: center;
+            margin-bottom: 0.5rem;
         }
 
         .logo {
@@ -38,27 +36,27 @@
 
         .data {
             width: 100%;
+            border-collapse: collapse;
+            text-align: center;
         }
 
-        .alert {
-            font-weight: bold;
-            font-size: 1.2em;
+        .data tr th,
+        .data tr td {
+            padding: 5px;
+            border: 1px solid #6d6d6d;
         }
+        .data thead tr{
+            background-color: black;
 
-        .alert-success {
-            color: #155724
         }
+        .data thead tr th{
 
-        .alert-danger {
-            color: #721c24;
+            color: white;
         }
-
-        .alert-warning {
-            color: #856404;
-        }
-
-        .alert-info {
-            color: #0c5460;
+        #header tr th,
+        #header tr td {
+            padding: 5px;
+            border: 1px solid #6d6d6d;
         }
     </style>
 </head>

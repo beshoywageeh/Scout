@@ -41,7 +41,8 @@
                                 aria-haspopup="true" aria-expanded="false"><i class="ti-more"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('department.profile', ['id' => $department->id]) }}"><i
+                                <a class="dropdown-item"
+                                    href="{{ route('department.profile', ['id' => $department->id]) }}"><i
                                         class="ti-info mr-2 text-primary"></i><strong>تفاصيل</strong>
                                 </a>
                                 @can('تعديل قطاع')
@@ -59,7 +60,10 @@
 
                                 <a
                                     href="{{ route('department.export.data', ['department_id' => $department->id]) }}"class="dropdown-item"><i
-                                        class="ti-download mr-2 text-success"></i>تصدير</a>
+                                        class="ti-download mr-2 text-success"></i><strong>تصدير إكسيل</strong></a>
+                                <a
+                                    href="{{ route('pdf.department_Export_pdf', ['id' => $department->id]) }}"class="dropdown-item"><i
+                                        class="ti-file mr-2 text-success"></i><strong>تصدير PDF</strong></a>
                             </div>
                         </div>
 
@@ -81,7 +85,8 @@
                                 @php
                                     $max = \App\Models\attendance::max('attendance_date');
                                     $att = \App\Models\attendance::where('department_id', $department->id)
-                                        ->where('attendance_date', $max)->where('status',1)
+                                        ->where('attendance_date', $max)
+                                        ->where('status', 1)
                                         ->count();
 
                                 @endphp

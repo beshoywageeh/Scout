@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb pt-0 pr-0 float-left float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('users.index') }}" class="default-color">الرئيسية</a>
+                    <li class="breadcrumb-item"><a href="{{ route('user.index') }}" class="default-color">الرئيسية</a>
                     </li>
                     <li class="breadcrumb-item active">اضف فرد</li>
                 </ol>
