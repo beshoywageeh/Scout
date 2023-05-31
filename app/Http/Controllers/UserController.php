@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\UsersExport;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Traits\ImageTrait;
 use App\Imports\UsersImport;
@@ -208,12 +207,7 @@ class UserController extends Controller
         }
     }
 
-    public function export($department_id)
-    {
-        $department = department::where('id', $department_id)->pluck('name')->first();
 
-        return (new UsersExport($department_id))->download($department.'.xlsx');
-    }
 
     public function upload_data(Request $request)
     {

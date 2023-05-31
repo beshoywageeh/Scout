@@ -51,12 +51,6 @@ class PdfController extends Controller
     {
         $data = [''];
         $data['department'] = department::with('users', 'image')->where('id', $id)->first();
-     /*   if (is_null($data['department']->image)) {
-
-        } else {
-            $image = asset('storage/attachments/departments/'.$data['department']->image->filename);
-        }
-*/
         $pdf = PDF::loadView('pdf.data', ['data' => $data], [], [
             'format' => 'A4',
             'margin_left' => 4,
@@ -78,7 +72,7 @@ class PdfController extends Controller
             'watermark_image_position' => 'P',
         ]);
 
-        return $pdf->download($data['department']->name . '.pdf');
+        return $pdf->stream($data['department']->name . '.pdf');
     }
 
     public function blacklist_pdf()

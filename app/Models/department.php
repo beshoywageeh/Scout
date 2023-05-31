@@ -23,7 +23,7 @@ class department extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class, 'department_id');
+        return $this->hasMany(User::class, 'department_id')->orderby('first_name', 'asc');
     }
 
     public function attendance()

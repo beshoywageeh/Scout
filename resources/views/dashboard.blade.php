@@ -23,11 +23,11 @@
 
     <!-- Start Widgets -->
     <div class="row">
-        <div class="col-12 mb-30 ">
+        <div class="col-lg-6 col-sm-12 mb-30 ">
             <div class="card card-statistics h-100">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-xl-12 mt-4 mt-xl-0">
+                        <div class="col-lg-12 col-sm-12 mt-4 mt-xl-0">
                             <h5 class="card-title">الاعداد - تفاصيل الحضور :
                                 <bdi>{{ $data['latest_date'] }}</bdi>
                             </h5>
@@ -83,6 +83,76 @@
                                 </div>
                             </div>
                         </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12 mb-30 ">
+
+            <div class="card card-statistics h-100">
+                <div class="card-body">
+                    <h5 class="card-title">الاعداد - تفاصيل الحضور </h5>
+
+                    <div class="accordion plus-icon shadow">
+                        @forelse ($data['dates'] as $date)
+                            <div class="acd-group">
+                                <a href="#" class="acd-heading">الاعداد - تفاصيل الحضور :
+                                    <bdi>{{ $date }}</a>
+                                <div class="acd-des">
+                                    <div class="table-responsive text-center">
+                                        <table class="table table-striped table-bordered p-0">
+                                            <thead class="alert alert-info">
+                                                <tr>
+                                                    <th>القطاع</th>
+                                                    <th>فعلي</th>
+                                                    <th>ارشيف</th>
+                                                    <th>حضور</th>
+                                                    <th>غياب</th>
+                                                    <th>اعتذار</th>
+                                                </tr>
+                                            </thead>
+                                            @foreach ($data['department'] as $department)
+                                                <tr>
+                                                    <td>
+                                                        {{ $department->name }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $department->users_count }}
+                                                    </td>
+                                                    <td>{{ User::onlyTrashed()->where('department_id', $department->id)->where('deleted_at', '>=', $date)->count() }}
+                                                    </td>
+                                                    <td>{{ attendance::where('department_id', $department->id)->where('attendance_date', $date)->where('status', 1)->count() }}
+                                                    </td>
+                                                    <td>{{ attendance::where('department_id', $department->id)->where('attendance_date', $date)->where('status', 2)->count() }}
+                                                    </td>
+                                                    <td>{{ attendance::where('department_id', $department->id)->where('attendance_date', $date)->where('status', 3)->count() }}
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            <tfoot class="alert alert-warning">
+                                                <tr>
+                                                    <th>أجمالي المجموعة</th>
+                                                    <th>{{ User::count() }}</th>
+                                                    <th>{{ User::onlyTrashed()->where('deleted_at', '>=', $date)->count() }}
+                                                    </th>
+                                                    <td>{{ attendance::where('attendance_date', $date)->where('status', 1)->count() }}
+                                                    </td>
+                                                    <td>{{ attendance::where('attendance_date', $date)->where('status', 2)->count() }}
+                                                    </td>
+                                                    <td>{{ attendance::where('attendance_date', $date)->where('status', 3)->count() }}
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="acd-des">
+                                <h5 class="alert alert-warning">لايوجد بيانات للعرض</h5>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -206,81 +276,7 @@
         </div>
     </div>
     <!-- End Widgets -->
-    <!-- Start Widgets -->
-    <div class="row">
-        <div class="col-12 mb-30 ">
 
-            <div class="card card-statistics h-100">
-                <div class="card-body">
-                    <h5 class="card-title">الاعداد - تفاصيل الحضور </h5>
-
-                    <div class="accordion plus-icon shadow">
-                        @forelse ($data['dates'] as $date)
-                            <div class="acd-group">
-                                <a href="#" class="acd-heading">الاعداد - تفاصيل الحضور :
-                                    <bdi>{{ $date }}</a>
-                                <div class="acd-des">
-                                    <div class="table-responsive text-center">
-                                        <table class="table table-striped table-bordered p-0">
-                                            <thead class="alert alert-info">
-                                                <tr>
-                                                    <th>القطاع</th>
-                                                    <th>فعلي</th>
-                                                    <th>ارشيف</th>
-                                                    <th>حضور</th>
-                                                    <th>غياب</th>
-                                                    <th>اعتذار</th>
-                                                </tr>
-                                            </thead>
-                                            @foreach ($data['department'] as $department)
-                                            <tr>
-                                                <td>
-                                                    {{ $department->name }}
-                                                </td>
-                                                <td>
-                                                    {{ $department->users_count }}
-                                                </td>
-                                                <td>{{ User::onlyTrashed()->where('department_id', $department->id)->where('deleted_at','>=',$date)->count() }}
-                                                </td>
-                                                <td>{{ attendance::where('department_id', $department->id)->where('attendance_date', $date)->where('status', 1)->count() }}
-                                                </td>
-                                                <td>{{ attendance::where('department_id', $department->id)->where('attendance_date', $date)->where('status', 2)->count() }}
-                                                </td>
-                                                <td>{{ attendance::where('department_id', $department->id)->where('attendance_date', $date)->where('status', 3)->count() }}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                            <tfoot class="alert alert-warning">
-                                                <tr>
-                                                    <th>أجمالي المجموعة</th>
-                                                    <th>{{ User::count() }}</th>
-                                                    <th>{{ User::onlyTrashed()->where('deleted_at', '>=', $date)->count() }}
-                                                    </th>
-                                                    <td>{{ attendance::where('attendance_date', $date)->where('status', 1)->count() }}
-                                                    </td>
-                                                    <td>{{ attendance::where('attendance_date', $date)->where('status', 2)->count() }}
-                                                    </td>
-                                                    <td>{{ attendance::where('attendance_date', $date)->where('status', 3)->count() }}
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                            @empty
-                                <div class="acd-des">
-                                    <h5 class="alert alert-warning">لايوجد بيانات للعرض</h5>
-                                </div>
-                        @endforelse
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-        <!-- End Widgets -->
-    @endsection
-    @push('script')
-    @endpush
+@endsection
+@push('script')
+@endpush

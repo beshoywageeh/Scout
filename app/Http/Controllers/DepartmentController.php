@@ -11,6 +11,8 @@ use Exception;
 use Flasher\Noty\Prime\NotyFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
 
 class DepartmentController extends Controller
 {
@@ -112,5 +114,11 @@ class DepartmentController extends Controller
 
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
+    }
+    public function export($department_id)
+    {
+        $department = department::where('id', $department_id)->pluck('name')->first();
+
+        return (new UsersExport($department_id))->download($department . '.xlsx');
     }
 }

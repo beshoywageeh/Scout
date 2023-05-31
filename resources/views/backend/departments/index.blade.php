@@ -62,7 +62,7 @@
                                     href="{{ route('department.export.data', ['department_id' => $department->id]) }}"class="dropdown-item"><i
                                         class="ti-download mr-2 text-success"></i><strong>تصدير إكسيل</strong></a>
                                 <a
-                                    href="{{ route('pdf.department_Export_pdf', ['id' => $department->id]) }}"class="dropdown-item"><i
+                                    href="{{ route('pdf.department_Export_pdf', ['id' => $department->id]) }}" target="_blank"class="dropdown-item"><i
                                         class="ti-file mr-2 text-success"></i><strong>تصدير PDF</strong></a>
                             </div>
                         </div>
