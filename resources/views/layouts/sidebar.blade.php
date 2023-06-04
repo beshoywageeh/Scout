@@ -35,7 +35,8 @@
                     <li> <a href={{route('reports.birthday')}}>اعياد الميلاد</a> </li>
                     <li> <a href={{route('reports.absent.data')}}>تقرير الغياب</a> </li>
                     <li> <a href={{route('reports.black_list_report')}}>تقرير البلاك ليست</a> </li>
-
+                    <li> <a href={{route('reports.totals_view')}}>تقرير اجمالي الحضور</a> </li>
+                  
                 </ul>
             </li>
             <li>

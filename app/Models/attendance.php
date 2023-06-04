@@ -47,4 +47,5 @@ class attendance extends Model
 
         return $full_name;
     }
+    
 }

@@ -96,4 +96,10 @@ class ReportController extends Controller
         //return $data;
         return view('backend.reports.absent_report', compact('departments'), ['data' => $data]);
     }
+    public function total()
+    {
+        $data['department'] = department::all();
+        return view('backend.reports.totals', ['data' => $data]);
+    }
+
 }

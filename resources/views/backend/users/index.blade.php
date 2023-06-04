@@ -106,7 +106,16 @@
                                                             data-user_code="{{ $user->code }}"
                                                             data-user_name="{{ $user->first_name . ' ' . $user->second_name . ' ' . $user->third_name }}"><i
                                                                 class="ti-archive mr-2 text-danger"></i><strong>ارشيف</strong>
-                                                        </button>@else
+                                                        </button>
+                                                        
+                                                        <button class="dropdown-item archive" data-toggle="modal"
+                                                            data-target="#personal_attend_user"
+                                                            data-user_code="{{ $user->code }}"
+                                                            data-user_department="{{ $user->department_id }}"
+                                                            data-user_name="{{ $user->first_name . ' ' . $user->second_name . ' ' . $user->third_name }}"><i
+                                                                class="ti-calendar mr-2 text-primary"></i><strong>تسجيل حضور</strong>
+                                                        </button>
+                                                        @else
 
                                                         <button  href='{{ route('user.restore') }}'
                                                                class='dropdown-item restore'data-toggle="modal"
@@ -141,6 +150,7 @@
                                 @include('backend.users.archive')
                                 @include('backend.users.restore')
                                 @include('backend.users.black_list')
+                                @include('backend.users.personal_attendance')
                             </tbody>
                         </table>
                     </div>
@@ -172,7 +182,7 @@
             modal.find('.modal-body #user_name').val(user_name);
         })
     </script>
-        <script>
+    <script>
             $('#restore_user').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget)
                 var user_code = button.data('user_code')
@@ -181,15 +191,27 @@
                 modal.find('.modal-body #user_code').val(user_code);
                 modal.find('.modal-body #user_name').val(user_name);
             })
-        </script>
-           <script>
-            $('#black_list_user').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget)
-                var user_code = button.data('user_code')
-                var user_name = button.data('user_name')
-                var modal = $(this)
-                modal.find('.modal-body #user_code').val(user_code);
-                modal.find('.modal-body #user_name').val(user_name);
-            })
-        </script>
+    </script>
+    <script>
+        $('#black_list_user').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var user_code = button.data('user_code')
+            var user_name = button.data('user_name')
+            var modal = $(this)
+            modal.find('.modal-body #user_code').val(user_code);
+            modal.find('.modal-body #user_name').val(user_name);
+        })
+    </script>
+    <script>
+        $('#personal_attend_user').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var user_code = button.data('user_code')
+            var user_name = button.data('user_name')
+            var user_department = button.data('user_department')
+            var modal = $(this)
+            modal.find('.modal-body #user_code').val(user_code);
+            modal.find('.modal-body #user_name').val(user_name);
+            modal.find('.modal-body #user_department').val(user_department);
+        })
+    </script>
 @endpush

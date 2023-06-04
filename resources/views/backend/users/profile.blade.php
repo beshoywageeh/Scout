@@ -47,6 +47,12 @@
                                             href="https://wa.me/{{ $data['user']->phone_number }}"><i
                                                 class="fa fa-whatsapp fa-2x"></i></a>
                                     </div>
+                                    <div class='col'>
+                                        <a href="{{ route('user.edit', ['id' => $data['user']->id]) }}"
+                                            class="btn btn-warning"><i
+                                                class="ti-pencil-alt"></i>
+                                        </a>
+                                    </div>
 
                                 </div>
                             </div>

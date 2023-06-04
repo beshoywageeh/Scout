@@ -83,15 +83,7 @@
                 <img class='logo' src="{{ asset('images/login-banner.jpg') }}">
             </td>
         </tr>
-        <tr>
-            <td style="width: 100%">حضور</td>
-            <td style="width: 100%">{{ $data['came'] }}</td>
-            <td style="width: 100%">غياب</td>
-            <td style="width: 100%">{{ $data['absent'] }}</td>
-            <td style="width: 100%">أعتذار</td>
-            <td style="width: 100%">{{ $data['e3tezar'] }}</td>
 
-        </tr>
         <tr>
             <td colspan='2'> من تاريخ :
                 {{ date($data['from']) }}
@@ -111,22 +103,25 @@
     <table class="data">
         <thead>
             <tr>
-                <th>#</th>
-                <th>الكود</th>
-                <th>الاسم</th>
-                <th>التاريخ</th>
-                <th>الحالة</th>
+                <th rowspan="2">#</th>
+                <th rowspan="2">الكود</th>
+                <th rowspan="2">الاسم</th>
+                <th colspan="3">الحالة</th>
             </tr>
-
+            <tr>
+                <th>ح</th>
+                <th>غ</th>
+                <th>ع</th>
+            </tr>
         </thead>
         <tbody>
-            @foreach ($data['attendance'] as $attendance)
+            @foreach ($data['user'] as $user)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $attendance->users->code }}</td>
-                    <td>{{ $attendance->users->full_name() }}</td>
-                    <td>{{ $attendance->attendance_date }}</td>
-                    {{ $attendance->status_check($attendance->status) }}
+                    <td>{{ $user->code }}</td>
+                    <td>{{ $user->full_name()}}</td>
+
+   {{$user->count_status($data['from'],$data['to'],$user->code,$user->department_id)}}
 
                 </tr>
             @endforeach

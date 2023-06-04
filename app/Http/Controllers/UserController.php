@@ -115,6 +115,7 @@ class UserController extends Controller
 
     public function update(Request $request, NotyFactory $flasher)
     {
+     //   return $request;
         DB::beginTransaction();
         $id = $request->id;
         // return $id;
@@ -148,7 +149,7 @@ class UserController extends Controller
                 'phone_number' => $request->phone_number,
                 'address' => $request->address,
                 'home_number' => $request->home_phone,
-                'church_father' => $request->church_father,
+                'church_father' => $request->chruch_father,
                 'join_date' => $request->join_date,
                 'birth_date' => $request->birth_date,
                 'department_id' => $request->department_id,
@@ -159,7 +160,7 @@ class UserController extends Controller
             DB::commit();
             $flasher->addSuccess('تم التعديل بنجاح');
 
-            return redirect()->back();
+            return redirect()->route('user.index');
         } catch (\Exception $e) {
             DB::rollBack();
 

@@ -83,4 +83,19 @@ class User extends Authenticatable
     {
         return    $this->first_name.' '.$this->second_name.' '.$this->third_name.' '.$this->fourth_name;
     }
+    public function count_status($from, $to, $id, $department_id)
+    {
+        $data['came'] = attendance::where('user_id', $id)->where('department_id', $department_id)
+            ->whereBetween('attendance_date', [$from, $to])
+            ->where('status', '1')->count();
+        $data['absent'] = attendance::where('user_id', $id)->where('department_id', $department_id)
+            ->whereBetween('attendance_date', [$from, $to])
+            ->where('status', '2')->count();
+        $data['e3tezar'] = attendance::where('user_id', $id)->where('department_id', $department_id)
+            ->whereBetween('attendance_date', [$from, $to])
+            ->where('status', '3')->count();
+        print_r('<td>' . $data['came'] . '</td>');
+        print_r('<td>' . $data['absent'] . '</td>');
+        print_r('<td>' . $data['e3tezar'] . '</td>');
+    }
 }

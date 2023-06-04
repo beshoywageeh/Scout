@@ -22,7 +22,7 @@ class AttendanceController extends Controller
 
     public function create($id)
     {
-        $users = User::with('attendance')->where('department_id', $id)->get();
+        $users = User::with('attendance')->where('department_id', $id)->orderby('first_name', 'asc')->get();
         $department = department::findorfail($id);
 
         return view('backend.attendance.create', compact('users', 'department'));
@@ -58,7 +58,31 @@ class AttendanceController extends Controller
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+    public function personal_attendance(Request $request, NotyFactory $flasher)
+    {
+        //  return $request;
+        try {
+            if ($request->attendance == 'attendance') {
+                $attendance_status = '1';
+            } elseif ($request->attendance == 'absent') {
+                $attendance_status = '2';
+            } else {
+                $attendance_status = '3';
+            }
+            attendance::updateorCreate(['user_id' => $request->id, 'attendance_date' => $request->attendace_date], [
+                'user_id' => $request->id,
+                'department_id' => $request->department_id,
+                'admin_id' => Auth::id(),
+                'attendance_date' => $request->attendace_date,
+                'status' => $attendance_status,
+            ]);
+            $flasher->addSuccess('تم الحفظ بنجاح');
 
+            return redirect()->route('user.index');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
     public function upload_data(Request $request, NotyFactory $flasher)
     {
         $path = $request->file('data')->getRealPath();
