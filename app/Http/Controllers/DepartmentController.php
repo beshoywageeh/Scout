@@ -31,7 +31,6 @@ class DepartmentController extends Controller
     {
         $data = [''];
         $data['departments'] = department::withCount('users')->get();
-
         return view('backend.departments.index', ['data' => $data]);
     }
 

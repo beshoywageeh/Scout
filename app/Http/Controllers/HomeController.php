@@ -27,11 +27,13 @@ class HomeController extends Controller
     {
         $data = [''];
         $data['department'] = department::withcount('users')->get();
-        $data['latest_date'] = attendance::latest()->pluck('attendance_date')->first();
+        $data['latest_date'] = attendance::latest('attendance_date')->pluck('attendance_date')->first();
         $data['users'] = User::latest()->take(10)->get();
         $data['attendance'] = attendance::latest()->take(10)->get();
-        $data['dates'] = attendance::pluck('attendance_date')->unique();
-        //return $data['dates'];
+        $data['dates'] = attendance::latest('attendance_date')
+            ->pluck('attendance_date')
+        ->unique();
+      //  return $data['dates'];
         return view('dashboard', ['data' => $data]);
     }
 }

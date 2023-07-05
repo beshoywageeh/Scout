@@ -26,7 +26,6 @@ class UsersImport implements ToModel, WithHeadingRow
             'home_number' => $row['home_number'],
             'deleted_at' => $row['deleted_at'],
             'church_father' => $row['church_father'],
-
         ]);
     }
 }

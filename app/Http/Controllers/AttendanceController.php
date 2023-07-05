@@ -22,7 +22,7 @@ class AttendanceController extends Controller
 
     public function create($id)
     {
-        $users = User::with('attendance')->where('department_id', $id)->orderby('first_name', 'asc')->get();
+        $users = User::where('department_id', $id)->orderby('first_name', 'asc')->get();
         $department = department::findorfail($id);
 
         return view('backend.attendance.create', compact('users', 'department'));

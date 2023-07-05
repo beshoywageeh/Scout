@@ -75,15 +75,18 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/absent', 'report_view_absent')->name('absent.data');
             Route::get('/absent_view', 'report_view_absent_data')->name('absent.data.view');
             Route::get('/total', 'total')->name('totals_view');
+            Route::post('/totals_report', 'total_report_data')->name('totals_report');
 
         });
     Route::name('pdf.')->prefix('pdf')->controller(PdfController::class)->group(function () {
-        Route::get('/{id}', 'department_data_pdf')->name('department_Export_pdf');
-        Route::get('/blacklist_pdf', 'blacklist_pdf')->name('blacklist_pdf');
+        Route::get('/department/{id}', 'department_data_pdf')->name('department_Export_pdf');
+        Route::get('/export_blacklist', 'blacklist_pdf')->name('blacklist_export');
+
+
         Route::get('/personal_info/{code}', 'export_personal_info')->name('personal.info');
         Route::get('/attendance/{id}/{date_from?}/{date_to?}', 'attendance_pdf')->name('attendance_Export_pdf');
-        Route::post('/totals_pdf', 'total_pdf')->name('totals_pdf');
         Route::get('/abesnt/{id}/{date_from}/{date_to}', 'absent_pdf')->name('absent_Export_pdf');
+        Route::get('/export_all', 'export_all')->name('export_all');
     });
     Route::post('/addnote', [NotesController::class, 'create'])->name('create.note');
 });

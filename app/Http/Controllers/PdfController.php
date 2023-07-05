@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Database\Query\Builder;
 use PDF;
 use Symfony\Component\HttpFoundation\Request;
+use Intervention\Image\Facades\Image;
 
 class PdfController extends Controller
 {
@@ -82,10 +83,8 @@ class PdfController extends Controller
     {
         $data = [''];
         $data['user'] = User::onlyTrashed()->where('black_list', 1)->get();
-
         $pdf = PDF::loadView('pdf.blacklist', ['data' => $data], [], [
             'format' => 'A4',
-
             'margin_left' => 4,
             'margin_right' => 4,
             'margin_top' => 4,
@@ -103,8 +102,7 @@ class PdfController extends Controller
             'watermark_image_size' => 'D',
             'watermark_image_position' => 'P',
         ]);
-
-        return $pdf->download('القائمة السوداء.pdf');
+        return $pdf->stream('القائمة السوداء.pdf');
     }
 
     public function export_personal_info($code)
@@ -113,7 +111,7 @@ class PdfController extends Controller
         $data['user'] = User::withTrashed()->where('code', $code)->first();
         $data['attendance'] = attendance::withTrashed()->where('user_id', $code)->where('status', '1')->count();
         $doc_name = $data['user']->first_name . ' ' . $data['user']->second_name;
-        $pdf = PDF::loadView('pdf.data_card', ['data' => $data], [], [
+        $pdf = PDF::loadview('pdf.data_card', ['data' => $data], [], [
             'format' => 'custom',
             'orientation' => 'L',
             'margin_left' => 1,
@@ -132,8 +130,8 @@ class PdfController extends Controller
             'watermark_image_size' => 'D',
             'watermark_image_position' => 'P',
         ]);
+        return $pdf->stream($doc_name . '.pdf');
 
-        return $pdf->download($doc_name . '.pdf');
     }
 
     public function attendance_pdf($id, $date_from = null, $date_to = null)
@@ -210,37 +208,31 @@ class PdfController extends Controller
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
-    public function total_pdf(Request $request)
-    {
-        try {
-            $data['from'] = $request->from;
-            $data['to'] = $request->to;
-            $data['department'] = department::with('image')->where('id', $request->department)->first();
-            $data['user'] = user::where('department_id', $request->department)->get();
-            if (is_null($data['department']->image)) {
-                $image = asset('images/login-banner.jpg');
-            } else {
-                $image = asset('storage/attachments/departments/' . $data['department']->image->filename);
-            }
-            $pdf = PDF::loadView('pdf.totals', ['data' => $data], [], [
-                'format' => 'A4',
-                'margin_header' => 0,
-                'margin_footer' => 0,
-                'orientation' => 'P',
-                'watermark' => $data['department']->name,
-                'show_watermark' => true,
-                'show_watermark_image' => true,
-                'watermark_font' => 'sans-serif',
-                'display_mode' => 'fullpage',
-                'watermark_text_alpha' => 0.2,
-                'watermark_image_path' => $image,
-                'watermark_image_alpha' => 0.2,
-                'watermark_image_size' => 'D',
-                'watermark_image_position' => 'P',
-            ]);
-            return $pdf->stream($data['department']->name . ' - اجمالي.pdf');
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        }
+    public function export_all(){
+        $data['dates'] = attendance::latest('attendance_date')
+            ->pluck('attendance_date')
+            ->unique();
+        $data['department']=department::get(['id','name']);
+      // return $data['dates'];
+        $pdf = PDF::loadview('pdf.export_all', ['data' => $data], [], [
+            'format' => 'A4',
+            'orientation' => 'L',
+            'margin_left' => 1,
+            'margin_right' => 1,
+            'margin_top' => 1,
+            'margin_bottom' => 1,
+            'margin_header' => 0,
+            'margin_footer' => 0,
+            'show_watermark' => true,
+            'show_watermark_image' => true,
+            'watermark_font' => 'sans-serif',
+            'display_mode' => 'fullpage',
+            'watermark_text_alpha' => 0.2,
+            'watermark_image_alpha' => 0.2,
+            'watermark_image_size' => 'D',
+            'watermark_image_position' => 'P',
+        ]);
+        return $pdf->stream('الاجمالي.pdf');
     }
+
 }

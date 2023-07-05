@@ -190,7 +190,7 @@ class UserController extends Controller
 
     public function force_delete(Request $request, NotyFactory $flasher)
     {
-        $id = $request->code;
+        $id = $request->id;
         //return $id;
         DB::beginTransaction();
         try {

@@ -92,8 +92,11 @@
 
             <div class="card card-statistics h-100">
                 <div class="card-body">
-                    <h5 class="card-title">الاعداد - تفاصيل الحضور </h5>
+<div class="row card-title">
+        <h5 class="">الاعداد - تفاصيل الحضور </h5>
+        <a href="{{route('pdf.export_all')}}" class="btn btn-success">تصدير الكل</a>
 
+</div>
                     <div class="accordion plus-icon shadow">
                         @forelse ($data['dates'] as $date)
                             <div class="acd-group">

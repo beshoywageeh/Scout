@@ -98,8 +98,27 @@ class ReportController extends Controller
     }
     public function total()
     {
-        $data['department'] = department::all();
+        $data['departments'] = department::all();
         return view('backend.reports.totals', ['data' => $data]);
+    }
+    public function total_report_data(Request $request)
+    {
+       // return $request;
+        try {
+            $data['from'] = $request->from;
+            $data['to'] = $request->to;
+            $data['department'] = department::with('image')->where('id', $request->department)->first();
+            $data['user'] = user::where('department_id', $request->department)->get();
+            $data['departments'] = department::all();
+            if (is_null($data['department']->image)) {
+                $image = asset('images/login-banner.jpg');
+            } else {
+                $image = asset('storage/attachments/departments/' . $data['department']->image->filename);
+            }
+            return view('backend.reports.totals', ['data' => $data]);
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
 }

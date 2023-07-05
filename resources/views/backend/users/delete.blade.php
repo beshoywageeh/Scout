@@ -12,7 +12,7 @@
                 </button>
             </div>
             <div class="modal-body text-center">
-                <form action="{{route('user.force_delete')}}" id="delete_user" method="post">
+                <form action="{{route('user.force_delete')}}" id="delete_user_form" method="post">
                     @csrf
                     <input type="hidden" name="id" id="user_code"  value="">
                     <div class="row">
@@ -25,7 +25,7 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-group" role="group">
-                    <button type="button"  class="btn btn-danger" onclick="event.preventDefault();document.getElementById('delete_user').submit();">حذف</button>
+                    <button type="button"  class="btn btn-danger" onclick="document.querySelector('#delete_user_form').submit();">حذف</button>
                     <button type="button" class="btn btn-gray" data-dismiss="modal">اغلاق</button>
 
                 </div>

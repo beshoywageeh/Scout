@@ -33,13 +33,15 @@
                         </div>
                     </div>
                 @else
-                <a target="_blank" href="{{ route('pdf.blacklist_pdf') }}"
+                <a target="_blank" href="{{route('pdf.blacklist_export')}}"
                         class="button btn-sm">PDF
 
                     </a>
-                <div class="table-responsive">
                     <table class="table table-striped table-bordered p-0 user_table">
                         <thead>
+                            <tr>
+                                <th colspan="8">بلاك ليست</th>
+                            </tr>
                             <tr>
                                 <th>#</th>
                                 <th>الفريق</th>
@@ -74,7 +76,7 @@
 
                         </tbody>
                     </table>
-                </div>
+
                     @endif
                 </div>
             </div>
