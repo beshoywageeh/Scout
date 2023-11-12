@@ -1,16 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\attendance;
 use App\Models\department;
 use App\Models\User;
-use DB;
 use Exception;
 use Illuminate\Database\Query\Builder;
 use PDF;
-use Symfony\Component\HttpFoundation\Request;
-use Intervention\Image\Facades\Image;
 
 class PdfController extends Controller
 {
@@ -22,12 +18,15 @@ class PdfController extends Controller
         $data['e3tezar'] = attendance::where('department_id', $id)->where('status', '3')->whereBetween('attendance_date', [$date_from, $date_to])->count();
         $data['department'] = department::where('id', $id)->first();
         $data['department'] = department::with('users', 'image')->where('id', $id)->first();
-        // return $data;
-        if (is_null($data['department']->image)) {
-            $image = asset('images/login-banner.jpg');
+        //return $data['department'];
+
+        if ($data['department']->image != null) {
+            $image = $data['department']->image->filename;
         } else {
-            $image = asset('storage/attachments/departments/' . $data['department']->image->filename);
+            $image = asset('images/login-banner.jpg');
         }
+        $data['path'] = asset('storage/attachments/departments/' . $image);
+        //return $path;
         $pdf = PDF::loadView('pdf.absent', ['data' => $data], [], [
             'format' => 'A4',
             'margin_left' => 4,
@@ -43,12 +42,12 @@ class PdfController extends Controller
             'watermark_font' => 'sans-serif',
             'display_mode' => 'fullpage',
             'watermark_text_alpha' => 0.2,
-            'watermark_image_path' => $image,
+            'watermark_image_path' => $data['path'],
             'watermark_image_alpha' => 0.2,
             'watermark_image_size' => 'D',
             'watermark_image_position' => 'P',
         ]);
-        return $pdf->download($data['department']->name . ' - افتقاد.pdf');
+        return $pdf->stream($data['department']->name . ' - افتقاد.pdf');
     }
 
     public function department_data_pdf($id)
@@ -76,7 +75,7 @@ class PdfController extends Controller
             'watermark_image_position' => 'P',
         ]);
 
-        return $pdf->stream($data['department']->name . '.pdf');
+        return $pdf->download($data['department']->name . '.pdf');
     }
 
     public function blacklist_pdf()
@@ -102,7 +101,7 @@ class PdfController extends Controller
             'watermark_image_size' => 'D',
             'watermark_image_position' => 'P',
         ]);
-        return $pdf->stream('القائمة السوداء.pdf');
+        return $pdf->download('القائمة السوداء.pdf');
     }
 
     public function export_personal_info($code)
@@ -130,7 +129,7 @@ class PdfController extends Controller
             'watermark_image_size' => 'D',
             'watermark_image_position' => 'P',
         ]);
-        return $pdf->stream($doc_name . '.pdf');
+        return $pdf->download($doc_name . '.pdf');
 
     }
 
@@ -203,12 +202,12 @@ class PdfController extends Controller
                 'watermark_image_size' => 'D',
                 'watermark_image_position' => 'P',
             ]);
-            return $pdf->stream($data['department']->name . ' - حضور.pdf');
+            return $pdf->download($data['department']->name . ' - حضور.pdf');
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
-    public function export_all(){
+    /*  public function export_all(){
         $data['dates'] = attendance::latest('attendance_date')
             ->pluck('attendance_date')
             ->unique();
@@ -216,7 +215,7 @@ class PdfController extends Controller
       // return $data['dates'];
         $pdf = PDF::loadview('pdf.export_all', ['data' => $data], [], [
             'format' => 'A4',
-            'orientation' => 'L',
+            'orientation' => 'P',
             'margin_left' => 1,
             'margin_right' => 1,
             'margin_top' => 1,
@@ -232,7 +231,44 @@ class PdfController extends Controller
             'watermark_image_size' => 'D',
             'watermark_image_position' => 'P',
         ]);
-        return $pdf->stream('الاجمالي.pdf');
-    }
+        return $pdf->download('الاجمالي.pdf');
+    }*/
+    public function total_report_data_pdf($id, $date_from, $date_to)
+    {
+        try {
+            $data['from'] = $date_from;
+            $data['to'] = $date_to;
+            $data['department'] = department::with('image')->where('id', $id)->first();
+            $data['user'] = user::where('department_id', $id)->get();
+            if (is_null($data['department']->image)) {
+                $image = asset('images/login-banner.jpg');
+            } else {
+                $image = asset('storage/attachments/departments/' . $data['department']->image->filename);
+            }
+            $pdf = PDF::loadview('pdf.total', ['data' => $data], [], [
+                'format' => 'A4',
+                'orientation' => 'P',
+                'margin_left' => 1,
+                'margin_right' => 1,
+                'margin_top' => 1,
+                'margin_bottom' => 1,
+                'margin_header' => 0,
+                'margin_footer' => 0,
+                'show_watermark' => true,
+                'show_watermark_image' => true,
+                'watermark_font' => 'sans-serif',
+                'watermark' => $data['department']->name,
 
+                'display_mode' => 'fullpage',
+                'watermark_text_alpha' => 0.2,
+                'watermark_image_path' => $image,
+                'watermark_image_alpha' => 0.2,
+                'watermark_image_size' => 'D',
+                'watermark_image_position' => 'P',
+            ]);
+            return $pdf->download($data['department']->name . '- إجمالي.pdf');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
 }

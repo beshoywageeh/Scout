@@ -53,7 +53,7 @@ class UserController extends Controller
             $user->address = $request->adress;
             $user->birth_date = $request->birth_date;
             $user->join_date = $request->join_date;
-            $user->home_number = $request->home_number;
+            $user->home_number = $request->home_phone;
             $user->email = $request->email;
             $user->church_father = $request->chruch_father;
             $user->department_id = $request->department_id;

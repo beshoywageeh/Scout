@@ -7,6 +7,17 @@
     {{ $title }}
 @endsection
 @push('css')
+<style>
+    @media print{
+        *{
+            text-align: center;
+            display: flex;
+            align-content: center;
+            align-items: center;
+
+        }
+    }
+</style>
 @endpush
 @section('content-header')
     <div class="page-title">
@@ -57,10 +68,15 @@
                             <div class="col-2">
                                 <button type="submit" class="button btn-block">بحث</button>
                             </div>
+@isset($data['user'])
+<div class="col-2">
+                                <a class="button btn-block" href="{{route('pdf.total_report', ['id' => $data['department']->id, 'date_from' => $data['from'], 'date_to' => $data['to']])}}">اطبع</a>
+                            </div>
+@endisset
                         </div>
                     </form>
                     @isset($data['user'])
-                        <div class='container text-center mt-3'>
+                        <div class='container text-center mt-3' id="data_print">
                             <div class="table-responsive">
                                 <table class="table table-bordered p-0 ">
 
@@ -139,4 +155,14 @@
     </div>
 @endsection
 @push('script')
+<script>
+    function print(){
+        var printContents = document.getElementById('data_print').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload();
+}
+</script>
 @endpush

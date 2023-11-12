@@ -107,7 +107,7 @@
                                 <div class="row mb-10">
                                     <div class="col-lg-6">
                                         <label>الفريق</label>
-                                        <select class="form-control" name="department_id" id="department">
+                                        <select class="custom-select" name="department_id" id="department">
                                             @foreach ($data['department'] as $department)
                                                 <option value="{{ $department->id }}"
                                                     {{ $department->id == $data['user']->department_id ? 'selected' : '' }}>
@@ -138,7 +138,7 @@
 
                                     <div class="col-lg-6">
                                         <label for="">شارات</label>
-                                        <select name="badges[]" id="badges" multiple class="form-control">
+                                        <select name="badges[]" id="badges" multiple class="custom-select">
 
                                         </select>
                                     </div>
@@ -162,7 +162,7 @@
                                         </div>
                                         <div class="col">
                                             <label>صلاحيه</label>
-                                            <select class="form-control" name="role" id="">
+                                            <select class="custom-select" name="role" id="">
                                                 @foreach ($data['roles'] as $role)
                                                     <option value="{{ $role->id }}">{{ $role->name }}</option>
                                                 @endforeach

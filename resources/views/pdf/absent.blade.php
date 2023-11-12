@@ -67,12 +67,8 @@
         <tr>
             <td rowspan="2" style="width: 100%">
 
-                @if (is_null($data['department']->image))
-                    <img class='logo' src="{{ asset('images/login-banner.jpg') }}">
-                @else
-                    <img class='logo'
-                        src="{{ asset('storage/attachments/departments/' . $data['department']->image->filename) }}">
-                @endif
+                    <img class='logo' src="{{ $data['path'] }}">
+
 
             </td>
             <td colspan='4' style="width: 100%">{{ $data['department']->name }}</td>

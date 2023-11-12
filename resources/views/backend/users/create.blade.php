@@ -95,7 +95,7 @@
                                 <div class="row mb-10">
                                     <div class="col-lg-6">
                                         <label>الفريق</label>
-                                        <select class="form-control" name="department_id" id="department">
+                                        <select class="custom-select" name="department_id" id="department" required>
                                             <option value="" selected disabled>اختر القطاع</option>
                                             @foreach ($departments as $department)
                                                 <option value="{{ $department->id }}">{{ $department->name }}</option>
@@ -126,7 +126,7 @@
 
                                     <div class="col-lg-6">
                                         <label for="">شارات</label>
-                                        <select name="badges[]" id="badges" multiple class="form-control">
+                                        <select name="badges[]" id="badges" multiple class="custom-select">
                                             <option value="" disabled>اختر القطاع اولا</option>
                                         </select>
                                     </div>
@@ -149,7 +149,7 @@
                                         </div>
                                         <div class="col">
                                             <label>صلاحيه</label>
-                                            <select class="form-control" name="role" id="">
+                                            <select class="custom-select" name="role" id="">
                                                 @foreach ($roles as $role)
                                                     <option value="{{ $role->id }}">{{ $role->name }}</option>
                                                 @endforeach

@@ -94,8 +94,9 @@ class User extends Authenticatable
         $data['e3tezar'] = attendance::where('user_id', $id)->where('department_id', $department_id)
             ->whereBetween('attendance_date', [$from, $to])
             ->where('status', '3')->count();
-        print_r('<td>' . $data['came'] . '</td>');
-        print_r('<td>' . $data['absent'] . '</td>');
-        print_r('<td>' . $data['e3tezar'] . '</td>');
+           print_r('<td>'. $data['came'] .'</td>');
+            print_r('<td>' . $data['absent'] . '</td>');
+            print_r('<td>' . $data['e3tezar'] . '</td>');
+
     }
 }

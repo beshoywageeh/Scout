@@ -49,13 +49,17 @@
                     </button>
                     <form method="POST" action="{{route('attendance.store')}}" id="submit_attendance">
                         @csrf
-
-                        <div class="col-lg-6">
-                            <label for="">التاريخ</label>
-                            <input class="form-control form-control-sm date-picker-default" type="date"
-                                   name="att_date">
-                        </div>
-                        <br>
+<div class="col-lg">
+    <div class="form-group">
+        <div class="input-group date" id="datepicker-action" data-date-format='yyyy-mm-dd'>
+            <input class="form-control form-control-sm date-picker-default" type="text" placeholder="تاريخ"
+            name="att_date">
+            <span class="input-group-addon">
+                <i class="fa fa-calendar"></i>
+            </span>
+        </div>
+    </div>
+</div>
                         <div class="table-responsive">
 
                             <table id="user_table" name="att_list" class="table table-striped table-bordered p-0">

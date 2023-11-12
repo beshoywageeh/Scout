@@ -2,7 +2,14 @@
 <div class="side-menu-fixed">
     <div class="scrollbar side-menu-bg">
         <ul class="nav navbar-nav side-menu" id="sidebarnav">
+            
             <!-- menu item Dashboard-->
+            <li>
+                <span class="center-nav-text p-2 bg-light"><img class="w-75 m-3"
+                    src="{{ URL::asset('images/logo-dark.png') }}" alt=""></span>
+                
+            </li>
+        </hr>
             <li>
                 <a href="{{route('dashboard')}}"><i class="ti-home"></i><span class="right-nav-text font-weight-bold">لوحة التحكم</span>
                 </a>
@@ -36,7 +43,7 @@
                     <li> <a href={{route('reports.absent.data')}}>تقرير الغياب</a> </li>
                     <li> <a href={{route('reports.black_list_report')}}>تقرير البلاك ليست</a> </li>
                     <li> <a href={{route('reports.totals_view')}}>تقرير اجمالي الحضور</a> </li>
-                  
+
                 </ul>
             </li>
             <li>
