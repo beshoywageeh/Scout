@@ -2,12 +2,12 @@
 <div class="side-menu-fixed">
     <div class="scrollbar side-menu-bg">
         <ul class="nav navbar-nav side-menu" id="sidebarnav">
-            
+
             <!-- menu item Dashboard-->
             <li>
                 <span class="center-nav-text p-2 bg-light"><img class="w-75 m-3"
                     src="{{ URL::asset('images/logo-dark.png') }}" alt=""></span>
-                
+
             </li>
         </hr>
             <li>
@@ -27,10 +27,7 @@
                         class="right-nav-text font-weight-bold">الافراد</span> </a>
             </li>
             <li>
-            <li>
-                <a href="{{route('attendance.index')}}"><i class="ti-calendar"></i><span
-                        class="right-nav-text font-weight-bold">الحضور</span> </a>
-            </li>
+
 
             <li>
                 <a href="javascript:void(0);" data-toggle="collapse" data-target="#reports">

@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/abesnt/{id}/{date_from}/{date_to}', 'absent_pdf')->name('absent_Export_pdf');
         Route::get('/export_all', 'export_all')->name('export_all');
         Route::get('/total/{id}/{date_from}/{date_to}','total_report_data_pdf')->name('total_report');
+        Route::get('/follow_up/{department_id}', 'follow_up')->name('follow_up');
     });
     Route::post('/addnote', [NotesController::class, 'create'])->name('create.note');
 });

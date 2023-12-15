@@ -41,6 +41,7 @@
                                 aria-haspopup="true" aria-expanded="false"><i class="ti-more"></i>
                             </button>
                             <div class="dropdown-menu">
+
                                 <a class="dropdown-item"
                                     href="{{ route('department.profile', ['id' => $department->id]) }}"><i
                                         class="ti-info mr-2 text-primary"></i><strong>تفاصيل</strong>
@@ -57,18 +58,23 @@
                                             class="ti-trash mr-2 text-danger"></i><strong>حذف</strong>
                                     </button>
                                 @endcan
-
+                                <a href="{{route('attendance.create',$department->id)}}"class="dropdown-item"><i
+                                    class="ti-calendar mr-2 text-success"></i><strong> تسجيل الحضور</strong></a>
                                 <a
                                     href="{{ route('department.export.data', ['department_id' => $department->id]) }}"class="dropdown-item"><i
                                         class="ti-download mr-2 text-success"></i><strong>تصدير إكسيل</strong></a>
                                 <a
                                     href="{{ route('pdf.department_Export_pdf', ['id' => $department->id]) }}" target="_blank"class="dropdown-item"><i
                                         class="ti-file mr-2 text-success"></i><strong>تصدير PDF</strong></a>
+                                        <a class="dropdown-item"
+                                        href="{{ route('pdf.follow_up', ['department_id' => $department->id]) }}"><i
+                                            class="ti-info mr-2 text-primary"></i><strong>تصدير كروت المتابعه</strong>
+                                    </a>
                             </div>
                         </div>
 
                         @if (is_null($department->image))
-                            <img class='img-fluid w-50 rounded-circle' src="">
+                            <img class='img-fluid w-50 rounded-circle' src="{{asset('images/login-banner.jpg')}}">
                         @else
                             <img class='img-fluid w-50 rounded-circle'
                                 src="{{ asset('storage/attachments/departments/' . $department->image->filename) }}">

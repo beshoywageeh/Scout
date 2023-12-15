@@ -5,8 +5,7 @@
 @endsection
 @push('css')
     <style>
-
-
+#perosna_data{border: 2px solid #ddd}
     </style>
 @endpush
 @section('content-header')
@@ -66,7 +65,7 @@
                                     <div class="col">{!!$data['user']->archive_check()!!}</div>
                                 </div>
                                 <div class="table-responsive" id="print">
-                                    <table class="table table-striped table-bordered center p-0">
+                                    <table id="data"class="table table-striped table-bordered center p-0">
                                         <tr>
                                             <td colspan="2">الكود</td>
                                             <td colspan="2">{{ $data['user']->code }}</td>

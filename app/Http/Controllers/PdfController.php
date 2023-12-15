@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\attendance;
-use App\Models\department;
-use App\Models\User;
+
+use App\Models\{attendance, department, User};
 use Exception;
 use Illuminate\Database\Query\Builder;
 use PDF;
@@ -207,7 +206,8 @@ class PdfController extends Controller
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
-    /*  public function export_all(){
+    public function export_all()
+    {
         $data['dates'] = attendance::latest('attendance_date')
             ->pluck('attendance_date')
             ->unique();
@@ -215,7 +215,7 @@ class PdfController extends Controller
       // return $data['dates'];
         $pdf = PDF::loadview('pdf.export_all', ['data' => $data], [], [
             'format' => 'A4',
-            'orientation' => 'P',
+            'orientation' => 'L',
             'margin_left' => 1,
             'margin_right' => 1,
             'margin_top' => 1,
@@ -232,7 +232,7 @@ class PdfController extends Controller
             'watermark_image_position' => 'P',
         ]);
         return $pdf->download('الاجمالي.pdf');
-    }*/
+    }
     public function total_report_data_pdf($id, $date_from, $date_to)
     {
         try {
@@ -267,6 +267,40 @@ class PdfController extends Controller
                 'watermark_image_position' => 'P',
             ]);
             return $pdf->download($data['department']->name . '- إجمالي.pdf');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+    public function follow_up($department_id)
+    {
+        try {
+            $data['users'] = user::where('department_id', $department_id)->with('department', 'department.image')->get();
+            /*  if (is_null($data['department']->image)) {
+                $image = asset('images/login-banner.jpg');
+            } else {
+                $image = asset('storage/attachments/departments/' . $data['department']->image->filename);
+            }*/
+          //  return $data['users'][0]->department;
+            $pdf = PDF::loadview('pdf.follow_up', ['data' => $data], [], [
+                'format' => 'A5',
+                'orientation' => 'L',
+                'margin_left' => 1,
+                'margin_right' => 1,
+                'margin_top' => 1,
+                'margin_bottom' => 1,
+                'margin_header' => 0,
+                'margin_footer' => 0,
+                'show_watermark' => true,
+                'show_watermark_image' => true,
+                'watermark_font' => 'sans-serif',
+                'watermark' => $data['department']->name,
+                'display_mode' => 'fullpage',
+                'watermark_text_alpha' => 0.2,
+                'watermark_image_alpha' => 0.2,
+                'watermark_image_size' => 'D',
+                'watermark_image_position' => 'P',
+            ]);
+            return $pdf->stream($data['department']->name . '- متابعه.pdf');
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
