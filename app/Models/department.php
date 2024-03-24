@@ -30,4 +30,19 @@ class department extends Model
     {
         return $this->hasMany(attendance::class, 'department_id');
     }
+
+    public function user_trashed()
+    {
+        return User::onlyTrashed()->where('department_id', $this->id)->where('deleted_at', 'like', '%'.$this->date.'%')->count();
+    }
+
+    public function attendance_data($date, $status)
+    {
+        return attendance::where('department_id', $this->id)->where('attendance_date', $date)->where('status', $status)->count();
+    }
+
+    public function attendance_data_total($date, $status)
+    {
+        return attendance::where('attendance_date', $date)->where('status', $status)->count();
+    }
 }

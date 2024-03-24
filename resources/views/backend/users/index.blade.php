@@ -7,7 +7,8 @@
         #user-table>thead>tr>th {
             text-align: center !important;
         }
-        .badge-black{
+
+        .badge-black {
             color: #fff;
             background-color: black;
         }
@@ -66,12 +67,7 @@
                                 @foreach ($data as $user)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>
-                                            @if ($user->department == null)
-                                            @else
-                                                {{ $user->department->name }}
-                                            @endif
-                                        </td>
+                                        <td>{{ $user->department->name }}</td>
                                         <td>{{ $user->code }}</td>
                                         <td>{{ $user->full_name() }}
                                             <br>
@@ -80,6 +76,7 @@
                                         </td>
                                         <td>{{ $user->address }}</td>
                                         <td>{{ $user->phone_number }}</td>
+
                                         <td>
                                             <div class="btn-group ">
                                                 <button type="button" class="btn btn-success btn-sm" data-toggle="dropdown"
@@ -100,40 +97,38 @@
                                                             class="ti-eye mr-2 text-info"></i><strong>تفاصيل</strong>
                                                     </a>
                                                     @if ($user->deleted_at == null)
-
                                                         <button class="dropdown-item archive" data-toggle="modal"
                                                             data-target="#archive_user"
                                                             data-user_code="{{ $user->code }}"
                                                             data-user_name="{{ $user->first_name . ' ' . $user->second_name . ' ' . $user->third_name }}"><i
                                                                 class="ti-archive mr-2 text-danger"></i><strong>ارشيف</strong>
                                                         </button>
-                                                        
+
                                                         <button class="dropdown-item archive" data-toggle="modal"
                                                             data-target="#personal_attend_user"
                                                             data-user_code="{{ $user->code }}"
                                                             data-user_department="{{ $user->department_id }}"
                                                             data-user_name="{{ $user->first_name . ' ' . $user->second_name . ' ' . $user->third_name }}"><i
-                                                                class="ti-calendar mr-2 text-primary"></i><strong>تسجيل حضور</strong>
+                                                                class="ti-calendar mr-2 text-primary"></i><strong>تسجيل
+                                                                حضور</strong>
                                                         </button>
-                                                        @else
-
-                                                        <button  href='{{ route('user.restore') }}'
-                                                               class='dropdown-item restore'data-toggle="modal"
-                                                               data-target="#restore_user"
-                                                               data-user_code="{{ $user->code }}"
-                                                               data-user_name="{{ $user->first_name . ' ' . $user->second_name . ' ' . $user->third_name }}">
-                                                               <i class='text-danger ti-reload mr-2'></i>
-                                                               <strong>ارجاع</strong></button>
+                                                    @else
+                                                        <button href='{{ route('user.restore') }}'
+                                                            class='dropdown-item restore'data-toggle="modal"
+                                                            data-target="#restore_user"
+                                                            data-user_code="{{ $user->code }}"
+                                                            data-user_name="{{ $user->first_name . ' ' . $user->second_name . ' ' . $user->third_name }}">
+                                                            <i class='text-danger ti-reload mr-2'></i>
+                                                            <strong>ارجاع</strong></button>
                                                     @endif
-                                                    @if($user->blank_list == null)
-                                                    <button
-                                                    data-toggle="modal"
-                                                    data-target="#black_list_user"
-                                                    data-user_code="{{ $user->code }}"
-                                                    data-user_name="{{ $user->first_name . ' ' . $user->second_name . ' ' . $user->third_name }}"                         class="dropdown-item"><i
-                                                            class="ti-list mr-2 text-secondary"></i><strong>بلاك
-                                                            ليست</strong>
-                                                    </button>
+                                                    @if ($user->blank_list == null)
+                                                        <button data-toggle="modal" data-target="#black_list_user"
+                                                            data-user_code="{{ $user->code }}"
+                                                            data-user_name="{{ $user->first_name . ' ' . $user->second_name . ' ' . $user->third_name }}"
+                                                            class="dropdown-item"><i
+                                                                class="ti-list mr-2 text-secondary"></i><strong>بلاك
+                                                                ليست</strong>
+                                                        </button>
                                                     @endif
                                                     <button class="dropdown-item" data-toggle="modal"
                                                         data-target="#delete_user" data-user_code="{{ $user->code }}"
@@ -183,14 +178,14 @@
         })
     </script>
     <script>
-            $('#restore_user').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget)
-                var user_code = button.data('user_code')
-                var user_name = button.data('user_name')
-                var modal = $(this)
-                modal.find('.modal-body #user_code').val(user_code);
-                modal.find('.modal-body #user_name').val(user_name);
-            })
+        $('#restore_user').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget)
+            var user_code = button.data('user_code')
+            var user_name = button.data('user_name')
+            var modal = $(this)
+            modal.find('.modal-body #user_code').val(user_code);
+            modal.find('.modal-body #user_name').val(user_name);
+        })
     </script>
     <script>
         $('#black_list_user').on('show.bs.modal', function(event) {

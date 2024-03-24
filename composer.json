@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.0",
         "laravelcollective/html": "^6.3",
+        "livewire/livewire": "*",
         "maatwebsite/excel": "^3.1",
         "mpdf/mpdf": "v8.1.2",
         "php-flasher/flasher": "^1.7",

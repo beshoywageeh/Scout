@@ -9,6 +9,14 @@ use Illuminate\Http\Request;
 
 class BadgeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:عرض الشارات|اضافة شارة|تعديل شارة|حذف شارة|تفاصيل شارة', ['only' => ['index', 'store', 'details']]);
+        $this->middleware('permission:اضافة شارة', ['only' => ['create', 'store']]);
+        $this->middleware('permission:تعديل شارة', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:حذف شارة', ['only' => ['destroy']]);
+        $this->middleware('permission:تفاصيل شارة', ['only' => ['details']]);
+    }
     public function index()
     {
         $badges = badge::all();

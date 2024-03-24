@@ -13,13 +13,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AttendanceController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        $departments = department::all();
-
-        return view('backend.attendance.index', compact('departments'));
+        $this->middleware('permission:عرض الحضور|اضافة حضور|تعديل حضور|حذف حضور', ['only' => ['index', 'store']]);
+        $this->middleware('permission:اضافة حضور', ['only' => ['create', 'store']]);
+        $this->middleware('permission:تعديل حضور', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:حذف حضور', ['only' => ['destroy']]);
     }
-
     public function create($id)
     {
         $users = User::where('department_id', $id)->orderby('first_name', 'asc')->get();
@@ -53,11 +53,12 @@ class AttendanceController extends Controller
             }
             $flasher->addSuccess('تم الحفظ بنجاح');
 
-            return redirect()->route('attendance.index');
+            return redirect()->route('department.index');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
     public function personal_attendance(Request $request, NotyFactory $flasher)
     {
         //  return $request;
@@ -83,6 +84,7 @@ class AttendanceController extends Controller
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
     public function upload_data(Request $request, NotyFactory $flasher)
     {
         $path = $request->file('data')->getRealPath();

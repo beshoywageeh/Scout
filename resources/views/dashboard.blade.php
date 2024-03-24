@@ -92,72 +92,60 @@
 
             <div class="card card-statistics h-100">
                 <div class="card-body">
-<div class="row card-title">
-        <h5 class="">الاعداد - تفاصيل الحضور </h5>
-        <a href="{{route('pdf.export_all')}}" class="btn btn-success">تصدير الكل</a>
+                    <div class="col-lg-12 col-sm-12 mt-4 mt-xl-0">
+                        <h5 class="card-title">الاعداد - تفاصيل الحضور
+                            <a href="{{ route('pdf.export_all') }}" class="btn btn-success">تصدير الكل</a>
+                        </h5>
+                    </div>
+                    <div class="container">
 
-</div>
-                    <div class="accordion plus-icon shadow">
-                        @forelse ($data['dates'] as $date)
-                            <div class="acd-group">
-                                <a href="#" class="acd-heading">الاعداد - تفاصيل الحضور :
-                                    <bdi>{{ $date }}</a>
-                                <div class="acd-des">
-                                    <div class="table-responsive text-center">
-                                        <table class="table table-striped table-bordered p-0">
-                                            <thead class="alert alert-info">
-                                                <tr>
-                                                    <th>القطاع</th>
-                                                    <th>فعلي</th>
-                                                    <th>ارشيف</th>
-                                                    <th>حضور</th>
-                                                    <th>غياب</th>
-                                                    <th>اعتذار</th>
-                                                </tr>
-                                            </thead>
-                                            @foreach ($data['department'] as $department)
-                                                <tr>
-                                                    <td>
-                                                        {{ $department->name }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $department->users_count }}
-                                                    </td>
-                                                    <td>{{ User::onlyTrashed()->where('department_id', $department->id)->where('deleted_at', '>=', $date)->count() }}
-                                                    </td>
-                                                    <td>{{ attendance::where('department_id', $department->id)->where('attendance_date', $date)->where('status', 1)->count() }}
-                                                    </td>
-                                                    <td>{{ attendance::where('department_id', $department->id)->where('attendance_date', $date)->where('status', 2)->count() }}
-                                                    </td>
-                                                    <td>{{ attendance::where('department_id', $department->id)->where('attendance_date', $date)->where('status', 3)->count() }}
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                            <tfoot class="alert alert-warning">
-                                                <tr>
-                                                    <th>أجمالي المجموعة</th>
-                                                    <th>{{ User::count() }}</th>
-                                                    <th>{{ User::onlyTrashed()->where('deleted_at', '>=', $date)->count() }}
-                                                    </th>
-                                                    <td>{{ attendance::where('attendance_date', $date)->where('status', 1)->count() }}
-                                                    </td>
-                                                    <td>{{ attendance::where('attendance_date', $date)->where('status', 2)->count() }}
-                                                    </td>
-                                                    <td>{{ attendance::where('attendance_date', $date)->where('status', 3)->count() }}
-                                                    </td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
+                        <div class="row">
+                            <form method="post">
+                                <input type="hidden" value="{{ route('mini_report') }}" id='url'>
+                                <input type="hidden" value="{{ csrf_token() }}" id='csrf'>
+                                <select id="report_date" class="custom-select">
+                                    <option value="">اختر التاريخ</option>
+                                    @foreach ($data['dates'] as $date)
+                                        <option value="{{ $date }}">{{ $date }}</option>
+                                    @endforeach
+                                </select>
+                            </form>
+
+                        </div>
+                        <div class="media">
+                            <div class="media-body">
+                                <div class="table-responsive text-center">
+
+                                    <table class="table table-striped table-bordered p-0">
+                                        <thead class="alert alert-info">
+                                            <tr>
+                                                <th>القطاع</th>
+                                                <th>فعلي</th>
+                                                <th>ارشيف</th>
+                                                <th>حضور</th>
+                                                <th>غياب</th>
+                                                <th>اعتذار</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id='data_list'>
+                                            <tr>
+                                                <td>-</td>
+                                                <th>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+
                                 </div>
                             </div>
-                        @empty
-                            <div class="acd-des">
-                                <h5 class="alert alert-warning">لايوجد بيانات للعرض</h5>
-                            </div>
-                        @endforelse
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -282,4 +270,24 @@
 
 @endsection
 @push('script')
+    <script>
+        $(document).on('change', '#report_date', function(e) {
+            let csrf_get = document.querySelector('#csrf').value,
+                date = $(this).val();
+            getData = document.querySelector('#url').value;
+          //  alert(date);
+            $.ajax({
+                method: "post",
+                url: getData +"/"+ date,
+                data: {
+                    _token: csrf_get,
+                },
+                responseType: "html",
+                cache: false,
+                success: function(response) {
+                    $("#data_list").html(response);
+                },
+            });
+        })
+    </script>
 @endpush

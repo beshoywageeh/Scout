@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <title>@yield('title')</title>
 @include('layouts.header_css')
+@livewireStyles
 </head>
 
 <body>
@@ -23,8 +24,7 @@ preloader -->
 preloader -->
     <!--=================================
 @include('layouts.header')
-  <!--=================================
-Main content -->
+
     <div class="container-fluid">
         <div class="row">
             @include('layouts.sidebar')
@@ -45,6 +45,7 @@ wrapper -->
 <!--=================================
 footer -->
 @include('layouts.footer_script')
+@livewireScripts
 </body>
 
 </html>

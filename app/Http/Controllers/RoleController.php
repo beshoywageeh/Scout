@@ -31,7 +31,7 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         $roles = Role::all();
-//return $roles;
+        //return $roles;
         return view('backend.roles.index', compact('roles'));
     }
 
@@ -43,7 +43,8 @@ class RoleController extends Controller
     public function create()
     {
         $permission = Permission::get();
-   return view('backend.roles.create', compact('permission'));
+
+        return view('backend.roles.create', compact('permission'));
     }
 
     /**

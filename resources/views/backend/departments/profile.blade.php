@@ -109,7 +109,6 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>كود</th>
-
                                                         <th>الاسم</th>
                                                         <th>العنوان</th>
                                                         <th>رقم التليفون</th>
@@ -121,11 +120,10 @@
                                                     </thead>
                                                     <tbody>
                                                     @foreach($data['department']->users as $user)
-
                                                         <tr>
                                                             <td>{{ $loop->iteration }}</td>
                                                             <td>{{ $user->code }}</td>
-                                                            <td>{{ $user->first_name.' '.$user->second_name.' '.$user->third_name }}</td>
+                                                            <td>{{ $user->full_name()  }}</td>
                                                             <td>{{ $user->address }}</td>
                                                             <td>{{ $user->phone_number }}</td>
                                                             <td>{{$user->birth_date}}</td>
@@ -134,7 +132,6 @@
                                                             <td>{{$user->join_date}}</td>
                                                         </tr>
                                                     @endforeach
-
                                                     </tbody>
                                                 </table>
                                             @endif
@@ -166,7 +163,7 @@
                                                     <tr>
                                                            <th>{{$loop->iteration}}</th>
                                                            <th>{{(is_null($users_data->users))?'-':$users_data->users->code }}</th>
-                                                        <th>{{(is_null($users_data->users))?'-':$users_data->users->first_name.' '.$users_data->users->second_name.' '.$users_data->users->third_name  }}</th>
+                                                        <th>{{(is_null($users_data->users))?'-':$users_data->users->full_name() }}</th>
                                                         @if($users_data->status =='1')
                                                             <th class="alert alert-success">ح</th>
                                                         @elseif($users_data->status =='2')
@@ -215,7 +212,7 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $data->code }}</td>
 
-                                                        <td>{{ $data->first_name.' '.$data->second_name.' '.$data->third_name }}</td>
+                                                        <td>{{ $data->full_name() }}</td>
                                                         <td>{{ $data->address }}</td>
                                                         <td>{{ $data->phone_number }}</td>
                                                         <td>{{$data->birth_date}}</td>
@@ -224,13 +221,13 @@
                                                         <td>{{$data->join_date}}</td>
                                                         <td>{{Carbon::parse($data->deleted_at)->format('Y-m-d')}}</td>
                                                         <td>
-                                                            <button  href='{{ route('user.restore') }}'
+                                                            <button  href='{{ route('user.restore') }}'title="ارجاع"
                                                                 class='btn btn-danger restore'data-toggle="modal"
                                                                 data-target="#restore_user"
                                                                 data-user_code="{{ $data->code }}"
-                                                                data-user_name="{{ $data->first_name . ' ' . $data->second_name . ' ' . $data->third_name }}">
-                                                                <i class='ti-reload mr-2'></i>
-                                                                <strong>ارجاع</strong></button>
+                                                                data-user_name="{{ $data->full_name() }}">
+                                                                <i class='ti-reload'></i>
+                                                                </button>
                                                         </td>
                                                     </tr>
                                                 @endforeach

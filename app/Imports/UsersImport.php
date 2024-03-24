@@ -19,13 +19,16 @@ class UsersImport implements ToModel, WithHeadingRow
         return new User([
             'code' => $row['id'],
             'department_id' => $row['department_id'],
-            'first_name' => $row['name'],
+            'first_name' => $row['first_name'],
+            'second_name' => $row['second_name'],
+            'third_name' => $row['third_name'],
+            'fourth_name' => $row['fourth_name'],
             'address' => $row['address'],
             'birth_date' => $row['birth_date'],
             'phone_number' => $row['phone_number'],
             'home_number' => $row['home_number'],
-            'deleted_at' => $row['deleted_at'],
             'church_father' => $row['church_father'],
+            'join_date' => $row['join_date'],
         ]);
     }
 }

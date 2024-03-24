@@ -96,14 +96,17 @@ class ReportController extends Controller
         //return $data;
         return view('backend.reports.absent_report', compact('departments'), ['data' => $data]);
     }
+
     public function total()
     {
         $data['departments'] = department::all();
+
         return view('backend.reports.totals', ['data' => $data]);
     }
+
     public function total_report_data(Request $request)
     {
-       // return $request;
+        // return $request;
         try {
             $data['from'] = $request->from;
             $data['to'] = $request->to;
@@ -113,12 +116,12 @@ class ReportController extends Controller
             if (is_null($data['department']->image)) {
                 $image = asset('images/login-banner.jpg');
             } else {
-                $image = asset('storage/attachments/departments/' . $data['department']->image->filename);
+                $image = asset('storage/attachments/departments/'.$data['department']->image->filename);
             }
+
             return view('backend.reports.totals', ['data' => $data]);
         } catch (Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
-
 }

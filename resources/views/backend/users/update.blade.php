@@ -162,7 +162,7 @@
                                         </div>
                                         <div class="col">
                                             <label>صلاحيه</label>
-                                            <select class="custom-select" name="role" id="">
+                                            <select class="custom-select" name="roles" id="">
                                                 @foreach ($data['roles'] as $role)
                                                     <option value="{{ $role->id }}">{{ $role->name }}</option>
                                                 @endforeach

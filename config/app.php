@@ -213,7 +213,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,'PDF' => Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::class, 'PdfWrapper' => Mcarlosen\laravelMpdf\Facades\PdfWrapperFacade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class, 'PDF' => Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::class, 'PdfWrapper' => Mcarlosen\laravelMpdf\Facades\PdfWrapperFacade::class,
 
     ])->toArray(),
 

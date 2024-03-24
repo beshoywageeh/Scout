@@ -63,14 +63,14 @@
     </style>
 </head>
 
-@foreach ($data['users'] as $user )
 <body>
+    @foreach ($data['users'] as $user )
     <table id='header'>
         <tr>
             <td rowspan="3" style="width: 100%">
 
                 @if (is_null($user->department->image))
-                    <img class='logo' src="{{ asset('images/login-banner.jpg') }}">
+                    <img style="width:100px,height:100px" class='logo' src="{{ asset('images/login-banner.jpg') }}">
                 @else
                     <img class='logo'
                         src="{{ asset('storage/attachments/departments/' . $user->department->image->filename) }}">
@@ -88,29 +88,27 @@
 
         </tr>
     </table>
-    <table>
-        <thead></thead>
-        <tr>
-
-        </tr>
-        <tr>
-
-
-        </tr>
-        <tr>
-
-        </tr>
-        <tr>
-
-        </tr>
-        <tr>
-
-        </tr>
-        <tr>
-
-        </tr>
+    <table class="data">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>التاريخ</th>
+                <th>قداس</th>
+                <th>خدمة</th>
+                <th>إعتراف</th>
+            </tr>
+        </thead>
+        @foreach ($data['dates'] as $date )
+<tr>
+    <td>{{$loop->iteration}}</td>
+    <td>{{$date->format('d-m-Y')}}</td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+        @endforeach
     </table>
+    @endforeach
 </body>
-@endforeach
 
 </html>

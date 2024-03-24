@@ -21,113 +21,131 @@
 @section('content')
     @include('backend.msg')
     @include('backend.departments.create')
+
     <div class="row">
         <div class="col-xl-12 mb-30">
-            @can('اضافة قطاع')
-                <button class="button text-bold mb-10" data-toggle="modal" data-target="#create_department">
-                    <i class="ti-plus"></i><strong>أضف</strong>
-                </button>
-            @endcan
+            <div class="card card-statistics h-100">
+                <div class="card-body">
+                    @can('اضافة قطاع')
+                        <button class="button text-bold mb-10" data-toggle="modal" data-target="#create_department">
+                            <i class="ti-plus"></i><strong>أضف</strong>
+                        </button>
+                    @endcan
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered p-0 text-center">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th></th>
+                                    <th>القطاع</th>
+                                    <th>إجمالي</th>
+                                    <th>حضور اخر اسبوع</th>
+                                    <th>أرشيف</th>
+                                    <th>العمليات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($data['departments'] as $department)
+                                    <tr>
+                                        <td>{{ $department->id }}</td>
+                                        <td>
+                                            @if (is_null($department->image))
+                                                <img class='img-responsive rounded-circle'
+                                                    src="{{ asset('images/login-banner.jpg') }}" style="width:50px">
+                                            @else
+                                                <img class='img-responsive rounded-circle'
+                                                    src="{{ asset('storage/attachments/departments/' . $department->image->filename) }}"style="width:50px">
+                                            @endif
+                                        </td>
+                                        <td>{{ $department->name }}</td>
+                                        <td>{{ $department->users_count }}</td>
+                                        @php
+                                            $max = \App\Models\attendance::max('attendance_date');
+                                            $att = \App\Models\attendance::where('department_id', $department->id)
+                                                ->where('attendance_date', $max)
+                                                ->where('status', 1)
+                                                ->count();
+
+                                        @endphp
+                                        <td>{{ $att }}</td>
+                                        <td>
+                                            {{ \App\Models\User::onlyTrashed()->where('department_id', $department->id)->count() }}
+
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-success btn-sm" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">العمليات
+                                            </button>
+                                                <div class="dropdown-menu">
+
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('department.profile', ['id' => $department->id]) }}"><i
+                                                            class="ti-info mr-2 text-primary"></i><strong>تفاصيل</strong>
+                                                    </a>
+                                                    @can('تعديل قطاع')
+                                                        <button class="dropdown-item" data-toggle="modal"
+                                                            data-target="#edit_department{{ $department->id }}"><i
+                                                                class="ti-pencil-alt mr-2 text-warning"></i><strong>تعديل</strong>
+                                                        </button>
+                                                    @endcan
+                                                    @can('حذف قطاع')
+                                                        <button class="dropdown-item" data-toggle="modal"
+                                                            data-target="#delete_department{{ $department->id }}"><i
+                                                                class="ti-trash mr-2 text-danger"></i><strong>حذف</strong>
+                                                        </button>
+                                                    @endcan
+                                                    @can('اضافة حضور')
+                                                    <a
+                                                        href="{{ route('attendance.create', $department->id) }}"class="dropdown-item"><i
+                                                            class="ti-calendar mr-2 text-success"></i><strong> تسجيل
+                                                            الحضور</strong></a>
+                                                            @endcan
+                                                    <a
+                                                        href="{{ route('department.export.data', ['department_id' => $department->id]) }}"class="dropdown-item"><i
+                                                            class="ti-download mr-2 text-success"></i><strong>تصدير
+                                                            إكسيل</strong></a>
+                                                    <a href="{{ route('pdf.department_Export_pdf', ['id' => $department->id]) }}"
+                                                        target="_blank"class="dropdown-item"><i
+                                                            class="ti-file mr-2 text-success"></i><strong>تصدير
+                                                            PDF</strong></a>
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('pdf.follow_up', ['department_id' => $department->id]) }}"><i
+                                                            class="ti-info mr-2 text-primary"></i><strong>تصدير كروت
+                                                            المتابعه</strong>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                    @include('backend.departments.delete')
+                                    @include('backend.departments.edit')
+                                @empty
+                                    <div class="col-lg-12">
+                                        <div class="alert alert-danger">
+                                            <h4 class="text-center font_cairo">لا يوجد بيانات للعرض</h4>
+                                        </div>
+                                    </div>
+                                    @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        @forelse ($data['departments'] as $department)
-            <div class="col-lg-4 mb-30">
-                <div class="card card-statistics h-100">
-                    <div class="p-4 text-center text-black">
-                        <h5 class="mb-20 text-black font_cairo">{{ $department->name }}</h5>
-                        <!-- action group -->
-                        <div class="btn-group info-drop">
-                            <button type="button" class="dropdown-toggle-split text-black" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false"><i class="ti-more"></i>
-                            </button>
-                            <div class="dropdown-menu">
-
-                                <a class="dropdown-item"
-                                    href="{{ route('department.profile', ['id' => $department->id]) }}"><i
-                                        class="ti-info mr-2 text-primary"></i><strong>تفاصيل</strong>
-                                </a>
-                                @can('تعديل قطاع')
-                                    <button class="dropdown-item" data-toggle="modal"
-                                        data-target="#edit_department{{ $department->id }}"><i
-                                            class="ti-pencil-alt mr-2 text-warning"></i><strong>تعديل</strong>
-                                    </button>
-                                @endcan
-                                @can('حذف قطاع')
-                                    <button class="dropdown-item" data-toggle="modal"
-                                        data-target="#delete_department{{ $department->id }}"><i
-                                            class="ti-trash mr-2 text-danger"></i><strong>حذف</strong>
-                                    </button>
-                                @endcan
-                                <a href="{{route('attendance.create',$department->id)}}"class="dropdown-item"><i
-                                    class="ti-calendar mr-2 text-success"></i><strong> تسجيل الحضور</strong></a>
-                                <a
-                                    href="{{ route('department.export.data', ['department_id' => $department->id]) }}"class="dropdown-item"><i
-                                        class="ti-download mr-2 text-success"></i><strong>تصدير إكسيل</strong></a>
-                                <a
-                                    href="{{ route('pdf.department_Export_pdf', ['id' => $department->id]) }}" target="_blank"class="dropdown-item"><i
-                                        class="ti-file mr-2 text-success"></i><strong>تصدير PDF</strong></a>
-                                        <a class="dropdown-item"
-                                        href="{{ route('pdf.follow_up', ['department_id' => $department->id]) }}"><i
-                                            class="ti-info mr-2 text-primary"></i><strong>تصدير كروت المتابعه</strong>
-                                    </a>
-                            </div>
-                        </div>
-
-                        @if (is_null($department->image))
-                            <img class='img-fluid w-50 rounded-circle' src="{{asset('images/login-banner.jpg')}}">
-                        @else
-                            <img class='img-fluid w-50 rounded-circle'
-                                src="{{ asset('storage/attachments/departments/' . $department->image->filename) }}">
-                        @endif
-                    </div>
-                    <div class="card-body text-center">
-                        <div class="row">
-                            <div class="col-6 col-sm-4 xs-mb-10 md-mt-0 mt-10">
-                                <b>الاجمالي</b>
-                                <h4 class="mt-10"> {{ $department->users_count }}</h4>
-                            </div>
-                            <div class="col-6 col-sm-4 xs-mb-10 md-mt-0 mt-10">
-                                <b>حضور </b>
-                                @php
-                                    $max = \App\Models\attendance::max('attendance_date');
-                                    $att = \App\Models\attendance::where('department_id', $department->id)
-                                        ->where('attendance_date', $max)
-                                        ->where('status', 1)
-                                        ->count();
-
-                                @endphp
-                                <h4 class="mt-10">{{ $att }}</h4>
-                            </div>
-                            <div class="col-12 col-sm-4 md-mt-0 mt-10">
-                                <b>أرشيف</b>
-                                <h4 class="mt-10">
-                                    {{ \App\Models\User::onlyTrashed()->where('department_id', $department->id)->count() }}
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @include('backend.departments.delete')
-            @include('backend.departments.edit')
-        @empty
-            <div class="col-lg-12">
-                <div class="alert alert-danger">
-                    <h4 class="text-center font_cairo">لا يوجد بيانات للعرض</h4>
-                </div>
-            </div>
-        @endforelse
     </div>
-@endsection
-@push('script')
-    <script>
-        function showPreview(event) {
-            if (event.target.files.length > 0) {
-                let src = URL.createObjectURL(event.target.files[0]),
-                    preview = document.getElementById("preview");
-                preview.src = "";
-                preview.src = src;
-            }
-        }
-    </script>
-@endpush
+            @endsection
+            @push('script')
+                <script>
+                    function showPreview(event) {
+                        if (event.target.files.length > 0) {
+                            let src = URL.createObjectURL(event.target.files[0]),
+                                preview = document.getElementById("preview");
+                            preview.src = "";
+                            preview.src = src;
+                        }
+                    }
+                </script>
+            @endpush

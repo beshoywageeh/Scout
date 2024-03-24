@@ -4,6 +4,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\NotesController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
@@ -25,6 +26,7 @@ Auth::routes(['register' => false]);
 Route::group(['middleware' => ['auth']], function () {
     Route::fallback(fn () => Redirect::to('/'));
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+    Route::post('/report_data/{date?}', [App\Http\Controllers\HomeController::class, 'mini_report'])->name('mini_report');
     Route::resource('roles', RoleController::class);
     //implement name =>''
     Route::name('user.')->prefix('users')->controller(UserController::class)->group(function () {
@@ -59,7 +61,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/delete/{id}', 'delete')->name('delete');
     });
     Route::name('attendance.')->prefix('attendance')->controller(AttendanceController::class)->group(function () {
-        Route::get('/', 'index')->name('index');
         Route::get('/create/{id?}', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::post('/delete/{id}', 'delete')->name('delete');
@@ -76,7 +77,6 @@ Route::group(['middleware' => ['auth']], function () {
             Route::get('/absent_view', 'report_view_absent_data')->name('absent.data.view');
             Route::get('/total', 'total')->name('totals_view');
             Route::post('/totals_report', 'total_report_data')->name('totals_report');
-
         });
     Route::name('pdf.')->prefix('pdf')->controller(PdfController::class)->group(function () {
         Route::get('/department/{id}', 'department_data_pdf')->name('department_Export_pdf');
@@ -85,8 +85,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/attendance/{id}/{date_from?}/{date_to?}', 'attendance_pdf')->name('attendance_Export_pdf');
         Route::get('/abesnt/{id}/{date_from}/{date_to}', 'absent_pdf')->name('absent_Export_pdf');
         Route::get('/export_all', 'export_all')->name('export_all');
-        Route::get('/total/{id}/{date_from}/{date_to}','total_report_data_pdf')->name('total_report');
+        Route::get('/total/{id}/{date_from}/{date_to}', 'total_report_data_pdf')->name('total_report');
         Route::get('/follow_up/{department_id}', 'follow_up')->name('follow_up');
     });
+    Route::resource('payment', PaymentController::class);
     Route::post('/addnote', [NotesController::class, 'create'])->name('create.note');
 });

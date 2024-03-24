@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Http\Traits\ImageTrait;
 use App\Models\attendance;
 use App\Models\department;
@@ -11,8 +12,6 @@ use Exception;
 use Flasher\Noty\Prime\NotyFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\UsersExport;
 
 class DepartmentController extends Controller
 {
@@ -31,6 +30,7 @@ class DepartmentController extends Controller
     {
         $data = [''];
         $data['departments'] = department::withCount('users')->get();
+
         return view('backend.departments.index', ['data' => $data]);
     }
 
@@ -114,10 +114,11 @@ class DepartmentController extends Controller
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
+
     public function export($department_id)
     {
         $department = department::where('id', $department_id)->pluck('name')->first();
 
-        return (new UsersExport($department_id))->download($department . '.xlsx');
+        return (new UsersExport($department_id))->download($department.'.xlsx');
     }
 }
